@@ -1,3 +1,4 @@
+using API.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,8 @@ var env = builder.Environment;
 
     services.AddEndpointsApiExplorer();
     services.AddSwaggerGen();
+    services.AddSwaggerDocumentation();
+    services.AddApplicationServices();
 }
 
 var app = builder.Build();

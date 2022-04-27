@@ -1,8 +1,8 @@
 version: '3.4'
 
 services:
-  chatsdb:
-    container_name: chatsdb
+  chatdb:
+    container_name: chatdb
     environment: 
       - ACCEPT_EULA=Y
       - SA_PASSWORD=Ebubechi89
@@ -35,28 +35,17 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - portainer_data:/data
 
-  chat.api:
-    container_name: chat.api
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - "ConnectionStrings:OrderingConnectionString=Server=chatsdb;Database=ChatDb;User Id=sa;Password=Ebubechi89;"
-      - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
-    depends_on: 
-      - chatsdb
-      - rabbitmq
-    ports:
-      - "8001:80"
+  
 
   stocks.api:
     container_name: stocks.api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      
       - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
     depends_on: 
       - rabbitmq
     ports:
-      - "8004:80"
+      - "5004:80"
 
     volumes:
       - ~/.aspnet/https:/root/.aspnet/https:ro
