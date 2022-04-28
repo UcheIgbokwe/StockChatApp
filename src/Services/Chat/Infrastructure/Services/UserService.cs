@@ -25,15 +25,21 @@ namespace Infrastructure.Services
         }
         public AuthenticateResponse Authenticate(AuthenticateRequest model)
         {
-            var user = _dbContext.Users.SingleOrDefault(x => x.UserName == model.UserName);
-
-            // validate
-            if (user == null || !BCrypt.Net.BCrypt.Verify(model.Password, user.PasswordHash))
-                throw new InvalidCredentialsException("Username or password is incorrect");
-            // authentication successful
-            var response = _mapper.Map<AuthenticateResponse>(user);
-            response.Token = _tokenService.GenerateToken(user);
-            return response;
+            try
+            {
+                var user = _dbContext.Users.SingleOrDefault(x => x.Email == model.Email);
+                // validate
+                if (user == null || !BCrypt.Net.BCrypt.Verify(model.Password, user.PasswordHash))
+                    throw new InvalidCredentialsException("Username or password is incorrect");
+                // authentication successful
+                var response = _mapper.Map<AuthenticateResponse>(user);
+                response.Token = _tokenService.GenerateToken(user);
+                return response;
+            }
+            catch (InvalidOperationException ex)
+            {
+                throw new InvalidOperationException("User lookup for Id = 1 failed", ex);
+            }
         }
 
         public IEnumerable<User> GetAll()
@@ -57,7 +63,6 @@ namespace Infrastructure.Services
 
             // hash password
             user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(model.Password);
-            //user.PasswordHash = model.Password;
 
             _dbContext.Users.Add(user);
             _dbContext.SaveChanges();

@@ -1,4 +1,5 @@
 using API.Extensions;
+using API.Helper;
 using Infrastructure.CronJob;
 using Infrastructure.Data;
 using Infrastructure.Helpers;
@@ -44,8 +45,6 @@ var env = builder.Environment;
     services.AddSwaggerDocumentation();
     services.AddAuthorizationServices(builder.Configuration);
     services.AddApplicationServices();
-
-    //services.AddHttpClient<HttpServices>("google");
 }
 
 var app = builder.Build();
@@ -54,9 +53,7 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
 
-//app.UseMiddleware<ExceptionMiddleware>();
-
-//app.UseMiddleware<JwtMiddleware>();
+app.UseMiddleware<JwtMiddleware>();
 
 app.MapControllers();
 

@@ -16,6 +16,8 @@ namespace API.Extensions
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IStocksService, StocksService>();
+            services.AddHttpClient<StocksService>("stocksService");
 
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
