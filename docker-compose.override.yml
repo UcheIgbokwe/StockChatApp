@@ -4,49 +4,26 @@ services:
   chatdb:
     container_name: chatdb
     environment: 
-      - ACCEPT_EULA=Y
-      - SA_PASSWORD=Ebubechi89
+      SA_PASSWORD: "Ebubechi89"
+      ACCEPT_EULA: "Y"
     ports:
         - "1433:1433"
 
-  rabbitmq:
-    container_name: rabbitmq
+  chat.api:
+    container_name: chat.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "ConnectionStrings:ChatConnectionString=Server=chatdb;Database=ChatDb;User Id=sa;Password=Ebubechi89;"
+      - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
+    depends_on: 
+      - chatdb
     ports:
-        - "5672:5672"
-        - "15672:15672"
-
-  pgadmin:
-    container_name: pgadmin
-    environment: 
-      - PGADMIN_DEFAULT_EMAIL=uchehenryigbokwe@gmail.com
-      - PGADMIN_DEFAULT_PASSWORD=admin1234
-    ports: 
-      - "5050:80"
-    volumes: 
-      - pgadmin_data:/root/.pgadmin
-
-
-  portainer:
-    container_name: portainer
-    ports: 
-      - "8080:8000"
-      - "9000:9000"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - portainer_data:/data
-
-  
+      - "5003:80"
 
   stocks.api:
     container_name: stocks.api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
-    depends_on: 
-      - rabbitmq
     ports:
       - "5004:80"
-
-    volumes:
-      - ~/.aspnet/https:/root/.aspnet/https:ro
-      - ~/.microsoft/usersecrets:/root/.microsoft/usersecrets:ro

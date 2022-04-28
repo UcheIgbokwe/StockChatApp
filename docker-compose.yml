@@ -2,23 +2,16 @@ version: '3.4'
 
 services:
   chatdb:
-    image: mcr.microsoft.com/azure-sql-edge
+    image: mcr.microsoft.com/azure-sql-edge 
 
-  rabbitmq:
-    image: rabbitmq:3-management-alpine
-
-  pgadmin:
-    image: dpage/pgadmin4
-
-  portainer:
-    image: portainer/portainer-ce
+  chat.api:
+    image: ${DOCKER_REGISTRY-}chatapi
+    build:
+      context: .
+      dockerfile: src/Services/Chat/API/Dockerfile
 
   stocks.api:
     image: ${DOCKER_REGISTRY-}stocksapi
     build:
       context: .
-      dockerfile: src/Services/Stocks/API/Dockerfile
-
-volumes:
-  portainer_data:
-  pgadmin_data:
+      dockerfile: src/Services/Stocks/API/Dockerfile    
