@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
-using Domain.Entities;
+using EventBus.Messages.Events;
 using Domain.Interface;
 using Infrastructure.Helpers;
 using Microsoft.Extensions.Configuration;

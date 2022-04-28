@@ -1,11 +1,14 @@
 using API.Extensions;
+using API.EventBusConsumer;
 using API.Helper;
 using Infrastructure.CronJob;
 using Infrastructure.Data;
 using Infrastructure.Helpers;
+using MassTransit;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using EventBus.Messages.Common;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +24,18 @@ var env = builder.Environment;
         c.TimeZoneInfo = TimeZoneInfo.Local;
         c.CronExpression = "*/1 * * * *";
     });
+
+    services.AddScoped<GetStockConsumer>();
+    //Mass transit-RabbitMq Config
+    services.AddMassTransit(config => {
+        config.AddConsumer<GetStockConsumer>();
+
+        config.UsingRabbitMq((ctx, cfg) => {
+            cfg.Host(builder.Configuration.GetValue<string>("EventBusSettings:HostAddress"));
+            cfg.ReceiveEndpoint(EventBusConstants.GetStockQueue, c => c.ConfigureConsumer<GetStockConsumer>(ctx));
+        });
+    });
+    services.AddMassTransitHostedService();
     services.AddControllers().AddNewtonsoftJson(opt =>
     {
         opt.SerializerSettings.ReferenceLoopHandling =

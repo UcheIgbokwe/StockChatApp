@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
-using Domain.Entities;
+using EventBus.Messages.Events;
 using Domain.Interface;
 using Infrastructure.Helpers;
 using Microsoft.Extensions.Configuration;
@@ -31,7 +31,9 @@ namespace Infrastructure.Services
                 query["s"] = stockCode;
                 query["f"] = _config["BrokerApi:Csv"];
                 builder.Query = query.ToString();
+
                 var url = builder.ToString();
+
                 using var response = await client.GetAsync(url);
                 if (response.IsSuccessStatusCode)
                 {

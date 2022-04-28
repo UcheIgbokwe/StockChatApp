@@ -4,6 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using API.Helper;
 using Domain.Interface;
+using EventBus.Messages.Common;
+using EventBus.Messages.Events;
+using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -14,21 +17,27 @@ namespace API.Controllers
     public class StocksController : Controller
     {
         private readonly IStocksService _stockService;
+        private readonly IBus _bus;
 
-        public StocksController(IStocksService stockService)
+        public StocksController(IStocksService stockService, IBus bus)
         {
             _stockService = stockService;
+            _bus = bus;
         }
 
         [HttpGet("GetStocks")]
         public async Task<IActionResult> GetStocks([FromQuery] string stockCode)
         {
-            var resp = await _stockService.GetStock(stockCode);
-            if(resp == null)
+            if(!string.IsNullOrEmpty(stockCode))
             {
-                return NotFound(new { message = "No available stocks"});
+                var resp = await _stockService.GetStock(stockCode);
+                if(resp == null)
+                {
+                    return NotFound(new { message = "No available stocks"});
+                }
+                return Ok(resp);
             }
-            return Ok(resp);
+            return BadRequest();
         }
     }
 }

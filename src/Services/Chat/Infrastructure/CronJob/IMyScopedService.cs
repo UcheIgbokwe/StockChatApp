@@ -27,16 +27,14 @@ namespace Infrastructure.CronJob
 
         public async Task DoWork(CancellationToken cancellationToken)
         {
-            // seed database
             try
             {
-                await EventDbContextSeed.SeedAsync(_chatDbContext, _loggerFactory);
+                await ChatDbContextSeed.SeedAsync(_chatDbContext, _loggerFactory);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occured seeding data");
             }
-            //await Task.Delay(1000 * 20, cancellationToken);
         }
     }
 }

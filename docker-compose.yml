@@ -4,6 +4,9 @@ services:
   chatdb:
     image: mcr.microsoft.com/azure-sql-edge 
 
+  rabbitmq:
+    image: rabbitmq:3-management-alpine  
+
   chat.api:
     image: ${DOCKER_REGISTRY-}chatapi
     build:
