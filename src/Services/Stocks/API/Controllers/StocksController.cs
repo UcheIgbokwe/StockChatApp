@@ -33,7 +33,13 @@ namespace API.Controllers
             }
             Uri uri = new($"amqp://localhost:5672/{EventBusConstants.GetStockQueue}");
             var endPoint = await _bus.GetSendEndpoint(uri);
-            await endPoint.Send(resp);
+            StockConsumer result = new()
+            {
+                MessageId = Guid.NewGuid(),
+                StockModelDetails = resp,
+                CreateDate = DateTime.Now
+            };
+            await endPoint.Send(result);
             return Ok(resp);
         }
     }
