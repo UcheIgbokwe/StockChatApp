@@ -2,13 +2,10 @@ using API.Extensions;
 using API.EventBusConsumer;
 using API.Helper;
 using Infrastructure.CronJob;
-using Infrastructure.Data;
-using Infrastructure.Helpers;
 using MassTransit;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using EventBus.Messages.Common;
+using EventBus.Messages.Events;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,8 +21,6 @@ var env = builder.Environment;
         c.TimeZoneInfo = TimeZoneInfo.Local;
         c.CronExpression = "*/1 * * * *";
     });
-
-    services.AddScoped<GetStockConsumer>();
     //Mass transit-RabbitMq Config
     services.AddMassTransit(config => {
         config.AddConsumer<GetStockConsumer>();
@@ -36,6 +31,7 @@ var env = builder.Environment;
         });
     });
     services.AddMassTransitHostedService();
+
     services.AddControllers().AddNewtonsoftJson(opt =>
     {
         opt.SerializerSettings.ReferenceLoopHandling =
@@ -43,23 +39,11 @@ var env = builder.Environment;
     });
     services.AddAutoMapper(typeof(Program));
 
-    services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
-    services.AddDbContext<ChatDbContext>(options =>
-    {
-        options.UseSqlServer(builder.Configuration.GetConnectionString("ChatConnectionString"),
-        sqlServerOptionsAction: sqlOptions =>
-        {
-            sqlOptions.EnableRetryOnFailure(
-                maxRetryCount: 10,
-                maxRetryDelay: TimeSpan.FromSeconds(30),
-                errorNumbersToAdd: null);
-        });
-    });
     services.AddEndpointsApiExplorer();
     services.AddSwaggerGen();
     services.AddSwaggerDocumentation();
     services.AddAuthorizationServices(builder.Configuration);
-    services.AddApplicationServices();
+    services.AddApplicationServices(builder.Configuration);
 }
 
 var app = builder.Build();

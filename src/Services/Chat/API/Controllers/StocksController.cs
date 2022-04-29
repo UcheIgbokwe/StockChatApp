@@ -7,6 +7,7 @@ using Domain.Interface;
 using EventBus.Messages.Common;
 using EventBus.Messages.Events;
 using MassTransit;
+using MassTransit.Mediator;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -17,27 +18,27 @@ namespace API.Controllers
     public class StocksController : Controller
     {
         private readonly IStocksService _stockService;
-        private readonly IBus _bus;
 
-        public StocksController(IStocksService stockService, IBus bus)
+        public StocksController(IStocksService stockService)
         {
             _stockService = stockService;
-            _bus = bus;
         }
 
-        [HttpGet("GetStocks")]
-        public async Task<IActionResult> GetStocks([FromQuery] string stockCode)
+        [HttpGet("SendStock")]
+        public async Task<IActionResult> SendStock([FromQuery] string stockCode)
         {
             if(!string.IsNullOrEmpty(stockCode))
             {
-                var resp = await _stockService.GetStock(stockCode);
-                if(resp == null)
-                {
-                    return NotFound(new { message = "No available stocks"});
-                }
-                return Ok(resp);
+                await _stockService.GetStock(stockCode);
+                return Ok(new { message = "Request has been delivered."});
             }
             return BadRequest();
+        }
+
+        [HttpGet("GetStock")]
+        public async Task<IActionResult> GetStock()
+        {
+            throw new NotImplementedException();
         }
     }
 }

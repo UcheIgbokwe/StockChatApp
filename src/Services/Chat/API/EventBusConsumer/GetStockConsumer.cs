@@ -1,7 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using EventBus.Messages.Events;
 using MassTransit;
 
@@ -13,7 +10,6 @@ namespace API.EventBusConsumer
         public GetStockConsumer(ILogger<GetStockConsumer> logger)
         {
             _logger = logger;
-
         }
         public async Task Consume(ConsumeContext<StockModel> context)
         {

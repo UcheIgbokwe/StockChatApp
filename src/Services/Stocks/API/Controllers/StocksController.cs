@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Domain.Interface;
 using EventBus.Messages.Common;
+using EventBus.Messages.Events;
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,8 +19,8 @@ namespace API.Controllers
 
         public StocksController(IHttpServices httpServices, IBus bus)
         {
-            _httpServices = httpServices;
             _bus = bus;
+            _httpServices = httpServices;
         }
 
         [HttpGet("GetStocks")]
@@ -30,7 +31,7 @@ namespace API.Controllers
             {
                 return NotFound(new { message = "No available stocks"});
             }
-            Uri uri = new($"amqp://guest:guest@localhost:5672/{EventBusConstants.GetStockQueue}");
+            Uri uri = new($"amqp://localhost:5672/{EventBusConstants.GetStockQueue}");
             var endPoint = await _bus.GetSendEndpoint(uri);
             await endPoint.Send(resp);
             return Ok(resp);
