@@ -29,7 +29,7 @@ namespace Tests.UnitTests.API.Controllers
                             .ReturnsAsync(new StockModel());
             var controller = new StocksController(_httpService.Object, _bus.Object);
 
-            var result = await controller.GetStocks("aapl.us");
+            var result = await controller.GetStocks("pl.us", "testGroup", "testUser");
 
             var resultIsNull = Assert.IsType<NotFoundObjectResult>(result);
             Assert.Equal("{ message = No available stocks }", resultIsNull?.Value?.ToString());
@@ -42,7 +42,7 @@ namespace Tests.UnitTests.API.Controllers
                             .ReturnsAsync(new StockModel());
             var controller = new StocksController(_httpService.Object, _bus.Object);
 
-            var result = await controller.GetStocks("aapl.us");
+            var result = await controller.GetStocks("pl.us", "testGroup", "testUser");
 
             var resultIsNotNull = Assert.IsType<NotFoundObjectResult>(result);
             Assert.Equal(404, resultIsNotNull.StatusCode);

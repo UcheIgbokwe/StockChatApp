@@ -24,7 +24,7 @@ namespace API.Controllers
         }
 
         [HttpGet("GetStocks")]
-        public async Task<IActionResult> GetStocks([FromQuery] string stockCode)
+        public async Task<IActionResult> GetStocks([FromQuery] string stockCode, string groupId, string addedBy)
         {
             var resp = await _httpServices.GetStock(stockCode);
             if(resp.High == 0)
@@ -37,6 +37,8 @@ namespace API.Controllers
             {
                 MessageId = Guid.NewGuid(),
                 StockModelDetails = resp,
+                AddedBy = addedBy,
+                GroupId = Int32.Parse(groupId),
                 CreateDate = DateTime.Now
             };
             await endPoint.Send(result);

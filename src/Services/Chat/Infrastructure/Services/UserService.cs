@@ -42,11 +42,6 @@ namespace Infrastructure.Services
             }
         }
 
-        public IEnumerable<User> GetAll()
-        {
-            return _dbContext.Users;
-        }
-
         public User GetById(int Id)
         {
             return GetUser(Id);

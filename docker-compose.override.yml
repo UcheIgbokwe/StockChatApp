@@ -13,7 +13,7 @@ services:
     container_name: rabbitmq
     ports:
         - "5672:5672"
-        - "15672:15672"      
+        - "15672:15672"
 
   chat.api:
     container_name: chat.api

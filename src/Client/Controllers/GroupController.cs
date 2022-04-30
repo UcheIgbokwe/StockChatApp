@@ -30,10 +30,10 @@ namespace Client.Controllers
             var groups = _context.UserGroup
                 .Where(gp => gp.UserName == _userManager.GetUserName(User))
                 .Join(_context.Groups, ug => ug.GroupId, g =>g.ID, (ug,g) =>
-                                new UserGroupViewModel(){
-                                    UserName = ug.UserName,
-                                    GroupId = g.ID,
-                                    GroupName = g.GroupName})
+                    new UserGroupViewModel(){
+                        UserName = ug.UserName,
+                        GroupId = g.ID,
+                        GroupName = g.GroupName})
                 .ToList();
 
             return groups;
@@ -42,45 +42,44 @@ namespace Client.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] NewGroupViewModel group)
         {
-            if (group == null || group.GroupName == "")
+            if(!string.IsNullOrEmpty(group.GroupName))
             {
-                return new ObjectResult(
-                    new { status = "error", message = "incomplete request" }
-                );
-            }
-            if( (_context.Groups.Any(gp => gp.GroupName == group.GroupName)) == true ){
-                return new ObjectResult(
-                    new { status = "error", message = "group name already exist" }
-                );
-            }
+                if( (_context.Groups.Any(gp => gp.GroupName == group.GroupName)) == true ){
+                    return new ObjectResult(
+                        new { status = "error", message = "group name already exist" }
+                    );
+                }
 
-            Group newGroup = new Group{ GroupName = group.GroupName };
-            // Insert this new group to the database...
-            _context.Groups.Add(newGroup);
-            _context.SaveChanges();
-            //Insert into the user group table, group_id and user_id in the user_groups table...
-            foreach( string UserName in group.UserNames)
-            {
-                _context.UserGroup.Add(
-                    new UserGroup{ UserName = UserName, GroupId = newGroup.ID }
-                );
+                Group newGroup = new Group{ GroupName = group.GroupName };
+                // Insert this new group to the database...
+                _context.Groups.Add(newGroup);
                 _context.SaveChanges();
+                //Insert into the user group table, group_id and user_id in the user_groups table...
+                foreach( string UserName in group.UserNames)
+                {
+                    _context.UserGroup.Add(
+                        new UserGroup{ UserName = UserName, GroupId = newGroup.ID }
+                    );
+                    _context.SaveChanges();
+                }
+                var options = new PusherOptions
+                {
+                    Cluster = "ap2",
+                    Encrypted = true
+                };
+                var pusher = new Pusher(
+                    "1403414",
+                    "b1123b7993f96bea3321",
+                    "a8073a8a34baee9d319f",
+                    options
+                );
+                var result = await pusher.TriggerAsync(
+                    "group_chat", //channel name
+                    "new_group", // event name
+                new { newGroup } );
+                return new ObjectResult(new { status = "success", data = newGroup });
             }
-            var options = new PusherOptions
-            {
-                Cluster = "ap2",
-                Encrypted = true
-            };
-            var pusher = new Pusher(
-                "1403414",
-                "09d9c12236bddfdad2c8",
-                "dd02bbb04c30b4afc34f",
-            options);
-            var result = await pusher.TriggerAsync(
-                "group_chat", //channel name
-                "new_group", // event name
-            new { newGroup } );
-            return new ObjectResult(new { status = "success", data = newGroup });
+            return BadRequest("Incomplete request");
         }
     }
 }

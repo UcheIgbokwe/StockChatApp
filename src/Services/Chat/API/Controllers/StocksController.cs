@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [ApiController]
     [Route("api/v1/[controller]")]
     public class StocksController : Controller
@@ -24,21 +24,15 @@ namespace API.Controllers
             _stockService = stockService;
         }
 
-        [HttpGet("SendStock")]
-        public async Task<IActionResult> SendStock([FromQuery] string stockCode)
+        [HttpGet("GetStock")]
+        public async Task<IActionResult> GetStock([FromQuery] string stockCode, string groupId, string addedBy)
         {
             if(!string.IsNullOrEmpty(stockCode))
             {
-                await _stockService.GetStock(stockCode);
+                await _stockService.GetStock(stockCode, groupId, addedBy);
                 return Ok(new { message = "Request has been delivered."});
             }
             return BadRequest();
-        }
-
-        [HttpGet("GetStock")]
-        public async Task<IActionResult> GetStock()
-        {
-            throw new NotImplementedException();
         }
     }
 }

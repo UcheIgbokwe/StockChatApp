@@ -12,9 +12,9 @@ namespace Client.Migrations
                 name: "Groups",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    GroupName = table.Column<string>(type: "TEXT", nullable: false)
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    GroupName = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -25,11 +25,11 @@ namespace Client.Migrations
                 name: "Message",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    AddedBy = table.Column<string>(type: "TEXT", nullable: false),
-                    message = table.Column<string>(type: "TEXT", nullable: false),
-                    GroupId = table.Column<int>(type: "INTEGER", nullable: false)
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AddedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    message = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    GroupId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -40,10 +40,10 @@ namespace Client.Migrations
                 name: "UserGroup",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    UserName = table.Column<string>(type: "TEXT", nullable: false),
-                    GroupId = table.Column<int>(type: "INTEGER", nullable: false)
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    GroupId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {

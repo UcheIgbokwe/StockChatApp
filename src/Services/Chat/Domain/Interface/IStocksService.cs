@@ -8,6 +8,6 @@ namespace Domain.Interface
 {
     public interface IStocksService
     {
-        Task GetStock(string stockCode);
+        Task GetStock(string stockCode, string groupId, string addedBy);
     }
 }

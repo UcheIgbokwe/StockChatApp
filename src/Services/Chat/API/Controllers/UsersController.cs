@@ -45,21 +45,5 @@ namespace API.Controllers
             _userService.Register(model);
             return Ok(new { message = "Registration successful" });
         }
-
-        [Admin]
-        [HttpGet]
-        public IActionResult GetAll()
-        {
-            var users = _userService.GetAll();
-            return Ok(users);
-        }
-
-        [Admin]
-        [HttpGet("{id}")]
-        public IActionResult GetById(int id)
-        {
-            var user = _userService.GetById(id);
-            return Ok(user);
-        }
     }
 }

@@ -11,5 +11,6 @@ namespace Infrastructure.Data
         }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<Message> Message { get; set; }
     }
 }

@@ -9,6 +9,8 @@ namespace EventBus.Messages.Events
     {
         public Guid MessageId { get; set; }
         public StockModel StockModelDetails { get; set; }
+        public string AddedBy { get; set;  }
+        public int GroupId { get; set;  }
         public DateTime CreateDate { get; set; }
     }
 }

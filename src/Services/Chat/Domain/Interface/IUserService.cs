@@ -10,7 +10,6 @@ namespace Domain.Interface
     public interface IUserService
     {
         AuthenticateResponse Authenticate(AuthenticateRequest model);
-        IEnumerable<User> GetAll();
         User GetById(int Id);
         void Register(RegisterRequest model);
     }

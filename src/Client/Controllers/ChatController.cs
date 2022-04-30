@@ -28,10 +28,10 @@ namespace Client.Controllers
             var groups =  _GroupContext.UserGroup
                 .Where( gp => gp.UserName == _userManager.GetUserName(User) )
                 .Join( _GroupContext.Groups, ug => ug.GroupId, g =>g.ID, (ug,g) =>
-                        new UserGroupViewModel{
-                            UserName = ug.UserName,
-                            GroupId = g.ID,
-                            GroupName = g.GroupName})
+                    new UserGroupViewModel{
+                        UserName = ug.UserName,
+                        GroupId = g.ID,
+                        GroupName = g.GroupName})
                 .ToList();
 
             ViewData["UserGroups"] = groups;

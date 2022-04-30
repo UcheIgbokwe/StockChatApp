@@ -29,7 +29,7 @@ namespace Client.Controllers
 
             try
             {
-                    group_id = Int32.Parse(channel_name.Replace("private-", ""));
+                group_id = Int32.Parse(channel_name.Replace("private-", ""));
             }
             catch (FormatException e)
             {
@@ -37,9 +37,9 @@ namespace Client.Controllers
             }
 
             var IsInChannel = _context.UserGroup
-                                        .Where(gb => gb.GroupId == group_id 
-                                            && gb.UserName == _userManager.GetUserName(User))
-                                        .Count();
+                .Where(gb => gb.GroupId == group_id 
+                    && gb.UserName == _userManager.GetUserName(User))
+                .Count();
 
             if( IsInChannel > 0){
                 var options = new PusherOptions
@@ -49,8 +49,8 @@ namespace Client.Controllers
                     };
                 var pusher = new Pusher(
                     "1403414",
-                    "09d9c12236bddfdad2c8",
-                    "dd02bbb04c30b4afc34f",
+                    "b1123b7993f96bea3321",
+                    "a8073a8a34baee9d319f",
                     options
                 );
 
