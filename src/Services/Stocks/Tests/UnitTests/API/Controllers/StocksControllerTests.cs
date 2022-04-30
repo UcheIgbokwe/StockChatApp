@@ -23,7 +23,7 @@ namespace Tests.UnitTests.API.Controllers
         }
 
         [Fact]
-        public async Task GetAllPropertyData_Should_Return_Null()
+        public async Task GetStock_Should_Return_Null()
         {
             _httpService.Setup(repo => repo.GetStock("aapl.us"))
                             .ReturnsAsync(new StockModel());
@@ -36,7 +36,7 @@ namespace Tests.UnitTests.API.Controllers
         }
 
         [Fact]
-        public async Task GetAllPropertyData_Should_Return_NotFound()
+        public async Task GetStock_Should_Return_NotFound()
         {
             _httpService.Setup(repo => repo.GetStock("aapl.us"))
                             .ReturnsAsync(new StockModel());
