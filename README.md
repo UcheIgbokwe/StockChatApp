@@ -17,7 +17,7 @@ Application was built using clean architecture, SOLID principles.
 
 ## SETUP
 
-> **Note**: Begin by cloning the project and navigate into the StockChatApp folder. Ensure to have .NET 6, running on your device. 
+> **Note**: Begin by cloning the project and navigate into the StockChatApp folder. 
 
 # SERVICES:
 To startup the SERVICES project, follow these steps:
@@ -25,8 +25,9 @@ To startup the SERVICES project, follow these steps:
 * Navigate to the [API](src/Services/) project folder
   * `cd src/Services`
   * `docker compose up`
+  > **Note**: Allow the build process to complete. 
 * Run the command below and listen on http://localhost:5003/swagger/index.html and http://localhost:5004/swagger/index.html
-  > **Note**: No need to visit the swagger page.
+
 
 To run the test, follow these steps:
 
