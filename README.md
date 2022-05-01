@@ -25,7 +25,7 @@ To startup the SERVICES project, follow these steps:
 * Navigate to the [API](src/Services/) project folder
   * `cd src/Services`
   * `docker compose up`
-* Run the command below and listen on https://localhost:5003/swagger: and https://localhost:5004/swagger:
+* Run the command below and listen on https://localhost:5003/swagger/index.html and https://localhost:5004/swagger/index.html
   > **Note**: No need to visit the swagger page.
 
 To run the test, follow these steps:
